@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgis:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/postgis-x86.Dockerfile
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: gis
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./geodata:/geodata
+      - postgis_data:/var/lib/postgresql/data
+
+  neo4j:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/neo4j-x86.Dockerfile
+    environment:
+      NEO4J_AUTH: neo4j/docker
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  postgis_data: ./geodb
+  neo4j_data: ./neo4j
